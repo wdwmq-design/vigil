@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VIGIL — Ground-Based Optical Detection and Tracking of Orbital Debris</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="workstation-root">
+    
+    <!-- 1. Slim Application Header (NASA Technical Header Style) -->
+    <header class="instrument-header">
+      <div class="brand-section">
+        <div class="brand-title">
+          <span class="brand-mark">VIGIL</span>
+          <span class="brand-separator">|</span>
+          <span class="brand-subtitle">Ground-Based Optical Detection and Tracking of Orbital Debris</span>
+        </div>
+      </div>
+
+      <div class="header-status-strip">
+        <div class="header-meta-item">
+          <span class="header-meta-label">Active Stack:</span>
+          <span id="activeJobLabel" class="mono-cell" style="font-weight: 600; color: var(--text-main);">No active job</span>
+        </div>
+        <div id="activeJobBadge" class="sci-badge sci-badge-upload" style="display: none;"></div>
+        <button id="refreshBtn" class="sci-btn sci-btn-sm" title="Synchronize state">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+          Sync
+        </button>
+      </div>
+    </header>
+
+    <!-- 2. Sub-Header Gate & Mission Verification Bar -->
+    <div id="gateAuditBar" class="gate-audit-bar">
+      <div class="gate-notice">
+        <span id="sidebarGatePill" class="gate-badge pending">● GATE A: MATLAB UNVERIFIED</span>
+        <span id="gateBannerText">
+          MATLAB executable not found on host. Mathematical engine execution is decoupled and awaiting Gate A verification.
+        </span>
+      </div>
+      <div class="gate-actions">
+        <span id="backendVersionBadge" class="mono-cell" style="font-size: 11px; color: var(--text-muted);">v0.1.0-core</span>
+      </div>
+    </div>
+
+    <!-- 3. Workstation Body -->
+    <div class="workspace-body">
+      
+      <!-- Restrained Sidebar Navigation (10 Modules) -->
+      <aside class="instrument-sidebar">
+        <div class="sidebar-section-title">Mission Modules</div>
+        <ul class="sidebar-nav-list">
+          <li>
+            <button class="nav-link-btn active" data-view="overview">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              1. Overview
+            </button>
+          </li>
+          <li>
+            <button class="nav-link-btn" data-view="image-analysis">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              2. Image Analysis
+            </button>
+          </li>
+          <li>
+            <button class="nav-link-btn" data-view="candidate-explorer">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              3. Candidate Explorer
+            </button>
+          </li>
+          <li>
+            <button class="nav-link-btn" data-view="tracking">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              4. Multi-Frame Tracking
+            </button>
+          </li>
+          <li>
+            <button class="nav-link-btn" data-view="trajectory-analysis">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><polyline points="10 8 13 12 16 9 19 14"/></svg>
+              5. Trajectory (PINN)
+            </button>
+          </li>
+          <li>
+            <button class="nav-link-btn" data-view="simulation-lab">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/></svg>
+              6. Simulation Lab
+            </button>
+          </li>
+          <li>
+            <button class="nav-link-btn" data-view="evaluation">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+              7. Evaluation
+            </button>
+          </li>
+          <li>
+            <button class="nav-link-btn" data-view="reports-export">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              8. Reports & Export
+            </button>
+          </li>
+          <li>
+            <button class="nav-link-btn" data-view="provenance">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              9. Provenance & Audit
+            </button>
+          </li>
+          <li>
+            <button class="nav-link-btn" data-view="execution">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+              10. Execution & Engine
+            </button>
+          </li>
+        </ul>
+
+        <div class="sidebar-section-title">Capabilities</div>
+        <ul class="sidebar-nav-list">
+          <li>
+            <button class="nav-link-btn" data-view="capabilities-matrix">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              Capabilities Matrix
+            </button>
+          </li>
+        </ul>
+
+        <div class="sidebar-section-title">Media</div>
+        <ul class="sidebar-nav-list">
+          <li>
+            <button class="nav-link-btn" data-view="demonstration">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              MATLAB Demonstration
+            </button>
+          </li>
+        </ul>
+
+        <div class="sidebar-footer-info">
+          <div><strong>Core Engine:</strong> MATLAB</div>
+          <div style="color: var(--text-muted); margin-top: 2px;">12 frozen mathematical algorithms preserved.</div>
+        </div>
+      </aside>
+
+      <!-- Center Scientific Console -->
+      <main class="instrument-console">
+        <div class="console-viewport">
+
+          <!-- ========================================================
+               VIEW 1: Overview
+               ======================================================== -->
+          <section id="viewOverview" class="view-container">
+            <div class="console-section-header">
+              <div>
+                <h2 class="section-headline">VIGIL System Overview & Mission Architecture</h2>
+                <p class="section-subtext">Ground-based optical detection, morphological classification, and physics-informed tracking of orbital debris.</p>
+              </div>
+              <span class="sci-badge sci-badge-synthetic">PHASE 0 IMPLEMENTATION</span>
+            </div>
+
+            <div class="technical-note">
+              <strong>Core Scientific Contract:</strong>
+              All scientific calculations are executed exclusively by the original MATLAB pipeline.
+              No JavaScript approximations, simulated trajectories, or mock detections are presented.
+              When MATLAB is not detected locally, outputs remain decoupled and verifiable via Gate A export/import.
+            </div>
+
+            <!-- Pipeline Architecture Flow Grid -->
+            <div class="grid-3" style="margin-bottom: 20px;">
+              <div class="metric-cell">
+                <div class="metric-cell-label">Stage 1 · Acquisition</div>
+                <div style="font-weight: 700; font-size: 13px; margin: 4px 0;">8-bit Greyscale BMPs</div>
+                <div class="metric-cell-caption">Monochrome camera stack with identity palette. Equidistant frame timing.</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">Stage 2 · Simulation</div>
+                <div style="font-weight: 700; font-size: 13px; margin: 4px 0;">Realistic Sensor Noise</div>
+                <div class="metric-cell-caption">Poisson shot, read noise, cosmic rays, tumbling flicker, aircraft/meteor distractors.</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">Stage 3 · Detection</div>
+                <div style="font-weight: 700; font-size: 13px; margin: 4px 0;">Morphology & Matched Filter</div>
+                <div class="metric-cell-caption">Temporal median background subtraction, 2D Gaussian SNR filter, adaptive Otsu.</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">Stage 4 · Tracking</div>
+                <div style="font-weight: 700; font-size: 13px; margin: 4px 0;">Kalman & PINN Trajectory</div>
+                <div class="metric-cell-caption">Constant-velocity filter with Mahalanobis gating + PINN acceleration loss regularizer.</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">Stage 5 · Evaluation</div>
+                <div style="font-weight: 700; font-size: 13px; margin: 4px 0;">Quantitative Benchmarking</div>
+                <div class="metric-cell-caption">Per-frame and track-level metrics vs ground truth (TP, FP, FN, F1, Noise sweeps).</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">Gate A · Integrity</div>
+                <div style="font-weight: 700; font-size: 13px; margin: 4px 0;">12 Frozen Algorithm Files</div>
+                <div class="metric-cell-caption">Immutable SHA-256 digests. Headless batch diff audit for transparent execution.</div>
+              </div>
+            </div>
+
+            <!-- Quick Staging & Ingestion Section -->
+            <div class="console-section-header">
+              <h3 style="font-size: 13px; font-weight: 700; color: var(--text-main);">Quick Action: Optical Stack Ingestion</h3>
+            </div>
+
+            <div class="ingestion-workbench">
+              <div class="ingestion-panel">
+                <div class="panel-header-strip">
+                  <span>Bundled Synthetic Sequence</span>
+                  <span class="sci-badge sci-badge-synthetic">IN-SAMPLE</span>
+                </div>
+                <div class="panel-body">
+                  <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 10px;">
+                    4-frame baseline optical sequence (646×486 px) with ground truth coordinates (<code class="mono-cell">debris_truth.mat</code>).
+                  </p>
+                  <button id="overviewStageBundledBtn" class="sci-btn sci-btn-primary" style="width: 100%;">
+                    Stage Bundled Dataset
+                  </button>
+                </div>
+              </div>
+
+              <div class="ingestion-panel">
+                <div class="panel-header-strip">
+                  <span>Observation Registry</span>
+                  <span id="overviewJobCount" class="sci-badge sci-badge-upload">0 Jobs</span>
+                </div>
+                <div class="panel-body" style="padding: 8px;">
+                  <div class="technical-table-wrapper" style="margin-bottom: 0; max-height: 140px;">
+                    <table class="data-table-dense">
+                      <thead>
+                        <tr>
+                          <th>Job ID</th>
+                          <th>Profile</th>
+                          <th>State</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody id="overviewJobsTableBody">
+                        <tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 12px;">No jobs staged.</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </section>
+
+
+          <!-- ========================================================
+               VIEW 2: Image Analysis (Upload to Processing)
+               ======================================================== -->
+          <section id="viewImageAnalysis" class="view-container" style="display: none;">
+            <div class="console-section-header">
+              <div>
+                <h2 class="section-headline">Image Analysis & Sensor Frame Inspection</h2>
+                <p class="section-subtext">8-bit monochrome BMP telescope stack validation, frame viewing, and detection overlays.</p>
+              </div>
+              <button id="importShippedBaselineBtn" class="sci-btn sci-btn-sm" style="display: none;">
+                Import Shipped Baseline Run
+              </button>
+            </div>
+
+            <!-- Ingestion & Upload Strip -->
+            <div class="ingestion-workbench" style="margin-bottom: 16px;">
+              <div class="ingestion-panel">
+                <div class="panel-header-strip">
+                  <span>Custom Frame Upload</span>
+                  <span class="sci-badge sci-badge-upload">BMP LOADER</span>
+                </div>
+                <div class="panel-body">
+                  <form id="imgUploadForm">
+                    <div class="scientific-dropzone" id="imgDropzone" style="padding: 12px;">
+                      <input type="file" id="imgFileInput" multiple accept=".bmp" style="display: none;">
+                      <div class="dropzone-prompt" style="font-size: 11px;">Select BMP Frame Stack</div>
+                      <div class="dropzone-rules" style="font-size: 10px;">8-bpp uncompressed, identity palette, matching dimensions</div>
+                    </div>
+                    <div id="imgUploadStatus" style="margin-top: 6px; font-size: 11px; min-height: 14px;"></div>
+                    <button type="submit" id="imgSubmitUploadBtn" class="sci-btn sci-btn-primary" style="width: 100%; margin-top: 8px;" disabled>
+                      Validate & Ingest Stack
+                    </button>
+                  </form>
+                </div>
+              </div>
+
+              <!-- Frame Stack Metadata Pane -->
+              <div class="ingestion-panel">
+                <div class="panel-header-strip">
+                  <span>Observation Frame Stack</span>
+                  <span id="activeStackFrameCount" class="sci-badge sci-badge-upload">0 Frames</span>
+                </div>
+                <div class="panel-body">
+                  <div class="frame-strip" id="frameThumbStrip">
+                    <div style="font-size: 11px; color: var(--text-muted); padding: 8px;">No frame stack loaded.</div>
+                  </div>
+                  <div style="font-size: 11px; color: var(--text-secondary);">
+                    <strong>Background Filtering:</strong> Temporal median background subtraction (<code class="mono-cell">load_frames.m</code>) extracts stationary star fields. 2D Gaussian matched filter (<code class="mono-cell">smoothSigma=1.5px</code>) enhances linear streak SNR.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Triple Viewport Inspection (All 3 Genuine Simulation Visualizations) -->
+            <div class="image-inspection-grid-3">
+              <div class="viewport-panel">
+                <div class="viewport-toolbar">
+                  <span>Detection Overlay Preview (Stage 3)</span>
+                  <a id="detImgDownloadLink" class="sci-btn sci-btn-sm" href="/simulation/results/files/detection_preview.png" download>Export PNG</a>
+                </div>
+                <div class="viewport-canvas-container">
+                  <img id="analysisDetPreviewImg" src="/simulation/results/files/detection_preview.png" alt="Detection Preview">
+                </div>
+              </div>
+
+              <div class="viewport-panel">
+                <div class="viewport-toolbar">
+                  <span>Temporal Blink Comparator</span>
+                  <a id="blinkImgDownloadLink" class="sci-btn sci-btn-sm" href="/simulation/results/files/blink.gif" download>Export GIF</a>
+                </div>
+                <div class="viewport-canvas-container">
+                  <img id="analysisBlinkGifImg" src="/simulation/results/files/blink.gif" alt="Blink GIF">
+                </div>
+              </div>
+
+              <div class="viewport-panel">
+                <div class="viewport-toolbar">
+                  <span>4-Frame Stack Montage (Raw)</span>
+                  <a id="montageImgDownloadLink" class="sci-btn sci-btn-sm" href="/simulation/results/files/frames_montage.png" download>Export PNG</a>
+                </div>
+                <div class="viewport-canvas-container">
+                  <img id="analysisMontageImg" src="/simulation/results/files/frames_montage.png" alt="Frames Montage">
+                </div>
+              </div>
+            </div>
+
+          </section>
+
+
+          <!-- ========================================================
+               VIEW 3: Candidate Explorer
+               ======================================================== -->
+          <section id="viewCandidateExplorer" class="view-container" style="display: none;">
+            <div class="console-section-header">
+              <div>
+                <h2 class="section-headline">Candidate Explorer & Morphological Classifier</h2>
+                <p class="section-subtext">Searchable, filterable region properties from detections.csv and heuristic classification audit.</p>
+              </div>
+              <span id="candidateFilterCountBadge" class="sci-badge sci-badge-upload">0 Detections</span>
+            </div>
+
+            <!-- Candidate Search & Filter Toolbar -->
+            <div class="filter-toolbar">
+              <div class="filter-group">
+                <label class="filter-label">Class:</label>
+                <select id="candFilterClass" class="filter-select">
+                  <option value="ALL">All Classes</option>
+                  <option value="streak-like">streak-like</option>
+                  <option value="artifact-like">artifact-like</option>
+                  <option value="compact">compact</option>
+                  <option value="unknown">unknown</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label class="filter-label">Candidate Only:</label>
+                <select id="candFilterIsCand" class="filter-select">
+                  <option value="ALL">All Regions</option>
+                  <option value="YES">Candidates Only (YES)</option>
+                  <option value="NO">Non-Candidates (NO)</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label class="filter-label">Frame:</label>
+                <select id="candFilterFrame" class="filter-select">
+                  <option value="ALL">All Frames</option>
+                  <option value="1">Frame 1</option>
+                  <option value="2">Frame 2</option>
+                  <option value="3">Frame 3</option>
+                  <option value="4">Frame 4</option>
+                </select>
+              </div>
+
+              <div class="filter-group" style="flex: 1; min-width: 140px;">
+                <label class="filter-label">Search:</label>
+                <input type="text" id="candSearchInput" class="filter-input" placeholder="Search ID, Subtype, Coords..." style="width: 100%;">
+              </div>
+            </div>
+
+            <div class="technical-note">
+              <strong>Heuristic Classification Disclosure:</strong>
+              Classification into <code class="mono-cell">streak-like</code>, <code class="mono-cell">artifact-like</code>, or <code class="mono-cell">compact</code> is based on morphological region properties (elongation $\ge 2.0$, length $\ge 10\text{ px}$, peak SNR $\ge 40$).
+              A heuristic candidate label flags a region for the Stage 4 tracker and does <em>not</em> confirm orbital debris until multi-frame kinematic gating is satisfied.
+            </div>
+
+            <!-- Detections Table -->
+            <div class="technical-table-wrapper" style="max-height: 420px;">
+              <table class="data-table-dense" id="explorerTable">
+                <thead>
+                  <tr>
+                    <th>Frame</th>
+                    <th>ID</th>
+                    <th>Class</th>
+                    <th>Subtype</th>
+                    <th>Candidate</th>
+                    <th class="num-cell">Centroid (x, y)</th>
+                    <th class="num-cell">Area</th>
+                    <th class="num-cell">Length (px)</th>
+                    <th class="num-cell">Elongation</th>
+                    <th class="num-cell">Mean SNR</th>
+                    <th class="num-cell">Peak SNR</th>
+                    <th>Bounding Box</th>
+                  </tr>
+                </thead>
+                <tbody id="explorerTableBody">
+                  <tr><td colspan="12" style="text-align: center; color: var(--text-muted); padding: 20px;">No detection records available.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Candidate Region Inspector Drawer -->
+            <div id="candidateDetailBox" class="detail-drawer" style="display: none;">
+              <div style="font-weight: 700; font-size: 12px; margin-bottom: 6px; color: var(--text-main);">
+                Selected Region Properties: <span id="detailCandTitle" class="mono-cell" style="color: var(--blue-primary);"></span>
+              </div>
+              <div class="grid-4" style="font-size: 11px;">
+                <div><strong>Centroid:</strong> <span id="detailCxCy" class="mono-cell"></span></div>
+                <div><strong>Bounding Box:</strong> <span id="detailBBox" class="mono-cell"></span></div>
+                <div><strong>Orientation:</strong> <span id="detailOrientation" class="mono-cell"></span></div>
+                <div><strong>Dash Count:</strong> <span id="detailDashCount" class="mono-cell"></span></div>
+                <div><strong>Raw Peak SNR:</strong> <span id="detailPeakZraw" class="mono-cell"></span></div>
+                <div><strong>Contrast:</strong> <span id="detailContrast" class="mono-cell"></span></div>
+                <div><strong>Major / Minor Axis:</strong> <span id="detailAxes" class="mono-cell"></span></div>
+                <div><strong>Classification Reason:</strong> <span id="detailReason"></span></div>
+              </div>
+            </div>
+
+          </section>
+
+
+          <!-- ========================================================
+               VIEW 4: Multi-Frame Tracking
+               ======================================================== -->
+          <section id="viewTracking" class="view-container" style="display: none;">
+            <div class="console-section-header">
+              <div>
+                <h2 class="section-headline">Multi-Frame Kinematic Tracking (Stage 4)</h2>
+                <p class="section-subtext">Kalman filtering, Mahalanobis validation gating, and dead-reckoning coasting.</p>
+              </div>
+              <span class="sci-badge sci-badge-unverified">GATE A PENDING (LIVE RUNS)</span>
+            </div>
+
+            <!-- Author's Verified Reference Tracking Figure (Stage 4 Output) -->
+            <div class="viewport-panel" style="margin-bottom: 18px;">
+              <div class="viewport-toolbar">
+                <span>Verified Reference MATLAB Trajectory Output (Stage 4 · track_debris.m)</span>
+                <span class="sci-badge sci-badge-synthetic">BASELINE SIMULATION RUN</span>
+              </div>
+              <div class="viewport-canvas-container" style="min-height: 380px;">
+                <img src="/demo-assets/WhatsApp Image 2026-10-10 at 02.46.35.jpeg" alt="Kalman Track Visualization" style="max-height: 480px;">
+              </div>
+              <div class="panel-body" style="background-color: var(--bg-toolbar); border-top: 1px solid var(--border-light); font-size: 11px;">
+                <div style="font-weight: 600; color: var(--text-main); margin-bottom: 4px;">Figure 1 Telemetry Key:</div>
+                <ul class="spec-list" style="margin-bottom: 0;">
+                  <li><span class="spec-name">White Solid Line:</span> <span class="spec-val">Kalman filtered trajectory across observation window</span></li>
+                  <li><span class="spec-name">Circles (○):</span> <span class="spec-val">Gated optical detections (Frames 1-4, colored by frame sequence)</span></li>
+                  <li><span class="spec-name">Squares (□):</span> <span class="spec-val">Dead-reckoned coasted positions during missing-detection frames</span></li>
+                  <li><span class="spec-name">Yellow Dashed:</span> <span class="spec-val">Extrapolated forward prediction with +3σ covariance ellipses</span></li>
+                  <li><span class="spec-name">Magenta Overlay:</span> <span class="spec-val">PINN regularized acceleration trajectory fit</span></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Scientific Honesty Empty State for Live Uploads -->
+            <div id="trackingEmptyState" class="honest-empty-state">
+              <span class="empty-state-badge">AWAITING GATE A FOR LIVE UPLOADS</span>
+              <h3 class="empty-state-headline">Live Tracking Execution Decoupled</h3>
+              <p class="empty-state-prose">
+                Stage 4 tracking (<code class="mono-cell">track_debris.m</code>) executes when a compatible MATLAB installation is verified (Gate A). The figure above illustrates the genuine verified tracking output obtained from the baseline simulation dataset. To generate live tracks for a new custom upload, export a Gate A job bundle.
+              </p>
+              <button id="trackingNavToExecBtn" class="sci-btn">Switch to Execution Boundary</button>
+            </div>
+
+            <!-- Active Tracking Content (Rendered only on valid imported tracks) -->
+            <div id="trackingActiveContent" style="display: none;">
+              <div class="image-inspection-grid">
+                <div class="viewport-panel">
+                  <div class="viewport-toolbar">
+                    <span>Inferred Kalman & PINN Trajectory Overlay</span>
+                  </div>
+                  <div class="viewport-canvas-container">
+                    <img id="trackingPreviewImg" src="" alt="Tracking Preview">
+                  </div>
+                </div>
+
+                <div class="viewport-panel">
+                  <div class="viewport-toolbar">
+                    <span>Kinematic Symbology & Units</span>
+                  </div>
+                  <div class="panel-body">
+                    <ul class="spec-list" style="margin-bottom: 0;">
+                      <li><span class="spec-name">White Solid:</span> <span class="spec-val">Kalman filtered trajectory</span></li>
+                      <li><span class="spec-name">Circles (○):</span> <span class="spec-val">Gated optical detections</span></li>
+                      <li><span class="spec-name">Squares (□):</span> <span class="spec-val">Dead-reckoned coasted frames</span></li>
+                      <li><span class="spec-name">Yellow Dashed:</span> <span class="spec-val">Extrapolated prediction with 3σ ellipses</span></li>
+                      <li><span class="spec-name">Magenta:</span> <span class="spec-val">PINN regularized acceleration trajectory</span></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="console-section-header" style="margin-top: 16px;">
+                <h3 style="font-size: 12px; font-weight: 700; color: var(--text-main);">Confirmed Tracks (tracks.csv)</h3>
+              </div>
+
+              <div class="technical-table-wrapper">
+                <table class="data-table-dense" id="tracksTable">
+                  <thead>
+                    <tr>
+                      <th>Track Index</th>
+                      <th>Frame</th>
+                      <th class="num-cell">Coordinates (x, y)</th>
+                      <th class="num-cell">Velocity (vx, vy)</th>
+                      <th>Measurement</th>
+                      <th class="num-cell">Uncertainty (σx, σy)</th>
+                      <th class="num-cell">PINN Position (px, py)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tracksTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+          </section>
+
+
+          <!-- ========================================================
+               VIEW 5: Trajectory Analysis (PINN)
+               ======================================================== -->
+          <section id="viewTrajectoryAnalysis" class="view-container" style="display: none;">
+            <div class="console-section-header">
+              <div>
+                <h2 class="section-headline">Trajectory Analysis & Physics-Informed Neural Network (PINN)</h2>
+                <p class="section-subtext">Analytical acceleration regularized trajectory estimation (pinn_trajectory.m).</p>
+              </div>
+              <span class="sci-badge sci-badge-unverified">GATE A PENDING</span>
+            </div>
+
+            <div class="technical-note">
+              <strong>PINN Trajectory Model Formulation:</strong>
+              <div style="font-family: var(--font-mono); margin-top: 4px; font-size: 11px;">
+                z(t) = line(t) + σ · NN((t - t0) / Ts)<br>
+                Loss = mean((NN - res)/σ)² + λ_acc · mean((d²z/dt² / accScale)²) + λ_w · ||θ||²
+              </div>
+              <div style="margin-top: 4px;">
+                The constant-velocity line serves as the zero-acceleration baseline. The small tanh neural network bends the path to fit detections while penalizing non-physical accelerations at collocation points across the query horizon.
+              </div>
+            </div>
+
+            <!-- PINN Hyperparameters & Architecture Strip -->
+            <div class="grid-4" style="margin-bottom: 16px;">
+              <div class="metric-cell">
+                <div class="metric-cell-label">Architecture</div>
+                <div class="metric-cell-value">8 Tanh Units</div>
+                <div class="metric-cell-caption">Single hidden layer backprop</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">Training Horizon</div>
+                <div class="metric-cell-value">3,000 Epochs</div>
+                <div class="metric-cell-caption">Adam optimizer (lr=0.01)</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">Physics Weight (λ)</div>
+                <div class="metric-cell-value">1.0</div>
+                <div class="metric-cell-caption">accScale = 0.5 px/frame²</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">Ensemble Members</div>
+                <div class="metric-cell-value">5 Networks</div>
+                <div class="metric-cell-caption">Spread = empirical uncertainty</div>
+              </div>
+            </div>
+
+            <!-- Trajectory Model Comparison Table -->
+            <div class="console-section-header">
+              <h3 style="font-size: 12px; font-weight: 700; color: var(--text-main);">Held-Out Prediction Model Comparison</h3>
+            </div>
+
+            <div class="technical-table-wrapper">
+              <table class="data-table-dense">
+                <thead>
+                  <tr>
+                    <th>Model</th>
+                    <th>Kinematic Assumption</th>
+                    <th>Regularization Mechanism</th>
+                    <th>Uncertainty Representation</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Constant-Velocity Kalman Filter</strong></td>
+                    <td>Linear constant velocity ($\ddot{z} = 0$)</td>
+                    <td>Process noise covariance $Q = \sigma_{\text{acc}}^2 \Gamma \Gamma^T$</td>
+                    <td>$3\sigma$ Covariance Ellipses ($P$)</td>
+                    <td><span class="sci-badge sci-badge-unverified">UNVERIFIED (Gate A)</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Physics-Informed Neural Net (PINN)</strong></td>
+                    <td>Differentiable continuous trajectory</td>
+                    <td>Analytic second-derivative penalty at collocation points</td>
+                    <td>5-member ensemble spread ($\sigma_{\text{pred}}$)</td>
+                    <td><span class="sci-badge sci-badge-unverified">UNVERIFIED (Gate A)</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Linear Least-Squares Fit</strong></td>
+                    <td>Strict straight line</td>
+                    <td>Zero degrees of freedom for acceleration</td>
+                    <td>Deterministic baseline</td>
+                    <td><span class="sci-badge sci-badge-unverified">UNVERIFIED (Gate A)</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </section>
+
+
+          <!-- ========================================================
+               VIEW 6: Simulation Lab
+               ======================================================== -->
+          <section id="viewSimulationLab" class="view-container" style="display: none;">
+            <div class="console-section-header">
+              <div>
+                <h2 class="section-headline">Simulation Lab & Synthetic CCD Modeling</h2>
+                <p class="section-subtext">Ground-truth trajectory inspection and realistic detector defect parameters (add_realistic_noise.m).</p>
+              </div>
+              <span class="sci-badge sci-badge-synthetic">SYNTHETIC MODEL</span>
+            </div>
+
+            <!-- Ground Truth Coordinates & Parameters -->
+            <div class="grid-2" style="margin-bottom: 16px;">
+              <div class="ingestion-panel">
+                <div class="panel-header-strip">
+                  <span>Ground Truth Trajectory (debris_truth.csv)</span>
+                </div>
+                <div class="panel-body" style="padding: 6px;">
+                  <table class="data-table-dense" id="simTruthTable">
+                    <thead>
+                      <tr>
+                        <th>Frame</th>
+                        <th class="num-cell">Centroid (cx, cy)</th>
+                        <th class="num-cell">Start (x1, y1)</th>
+                        <th class="num-cell">End (x2, y2)</th>
+                        <th class="num-cell">Flux (e-)</th>
+                      </tr>
+                    </thead>
+                    <tbody id="simTruthTableBody">
+                      <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 10px;">Loading truth records...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="ingestion-panel">
+                <div class="panel-header-strip">
+                  <span>True Kinematics & Sensor Parameters</span>
+                </div>
+                <div class="panel-body">
+                  <ul class="spec-list">
+                    <li><span class="spec-name">Velocity Vector:</span> <span class="spec-val" id="simVelText">vx = +163.65 px/frame, vy = -64.80 px/frame (Speed = 176.01 px/frame)</span></li>
+                    <li><span class="spec-name">Debris Flux:</span> <span class="spec-val">3,500 e- / frame (flicker = 25%, period = 3.2 frames)</span></li>
+                    <li><span class="spec-name">Streak Length:</span> <span class="spec-val">14 px (motion blur during exposure)</span></li>
+                    <li><span class="spec-name">Read Noise:</span> <span class="spec-val">6 e- (Gain: 4 e-/DN, Sky Gradient = 0.35)</span></li>
+                    <li><span class="spec-name">Sensor Defects:</span> <span class="spec-val" id="simDefectsText">Hot: 156 px · Dead: 125 px · Stuck: 31 px · Col: 486 px</span></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Distractors & Defect Manifest (debris_truth.mat) -->
+            <div class="technical-table-wrapper" style="margin-bottom: 16px;">
+              <table class="data-table-dense">
+                <thead>
+                  <tr>
+                    <th>Observation Frame</th>
+                    <th>Injected Target</th>
+                    <th>Co-Existing Distractor (debris_truth.mat)</th>
+                    <th>Detector Artifact Impact</th>
+                    <th>Expected Tracker Handling</th>
+                  </tr>
+                </thead>
+                <tbody id="simDistractorsTableBody">
+                  <tr>
+                    <td class="mono-cell">Frame 1</td>
+                    <td>Orbital debris candidate streak</td>
+                    <td><span style="color: var(--text-muted);">None (nominal starfield)</span></td>
+                    <td>Gaussian read noise + Poisson shot noise</td>
+                    <td><span class="sci-badge sci-badge-implemented">Track Initiated</span></td>
+                  </tr>
+                  <tr>
+                    <td class="mono-cell">Frame 2</td>
+                    <td>Orbital debris candidate streak</td>
+                    <td><strong style="color: var(--amber-status);">Satellite Streak</strong> (long continuous transit)</td>
+                    <td>Cosmic ray hit + hot column overlay</td>
+                    <td><span class="sci-badge sci-badge-implemented">Length Gated</span></td>
+                  </tr>
+                  <tr>
+                    <td class="mono-cell">Frame 3</td>
+                    <td>Orbital debris candidate streak</td>
+                    <td><strong style="color: var(--amber-status);">Aircraft Strobe</strong> (dashed pulses, 30px gap)</td>
+                    <td>Hot pixel cluster</td>
+                    <td><span class="sci-badge sci-badge-implemented">Morph Closing Filter</span></td>
+                  </tr>
+                  <tr>
+                    <td class="mono-cell">Frame 4</td>
+                    <td>Orbital debris candidate streak</td>
+                    <td><strong style="color: var(--amber-status);">Meteor Transit</strong> (single-frame streak)</td>
+                    <td>Dead column segment (486 px)</td>
+                    <td><span class="sci-badge sci-badge-implemented">Multi-Frame Gated</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Dual Viewport Inspection: Simulated Ground Truth vs Raw Frame Montage -->
+            <div class="image-inspection-grid">
+              <div class="viewport-panel">
+                <div class="viewport-toolbar">
+                  <span>Simulated Debris & Distractors (debris_preview.png)</span>
+                  <a class="sci-btn sci-btn-sm" href="/simulation/preview" download>Download PNG</a>
+                </div>
+                <div class="viewport-canvas-container" style="min-height: 320px;">
+                  <img src="/simulation/preview" alt="Simulation Preview" style="max-height: 420px;">
+                </div>
+              </div>
+
+              <div class="viewport-panel">
+                <div class="viewport-toolbar">
+                  <span>4-Frame Raw Observation Montage (frames_montage.png)</span>
+                  <a class="sci-btn sci-btn-sm" href="/simulation/results/files/frames_montage.png" download>Download PNG</a>
+                </div>
+                <div class="viewport-canvas-container" style="min-height: 320px;">
+                  <img src="/simulation/results/files/frames_montage.png" alt="Frames Montage" style="max-height: 420px;">
+                </div>
+              </div>
+            </div>
+
+          </section>
+
+
+          <!-- ========================================================
+               VIEW 7: Evaluation
+               ======================================================== -->
+          <section id="viewEvaluation" class="view-container" style="display: none;">
+            <div class="console-section-header">
+              <div>
+                <h2 class="section-headline">Quantitative Evaluation & Sensitivity Benchmarking</h2>
+                <p class="section-subtext">Precision, recall, and robustness evaluation against ground truth (evaluate_pipeline.m).</p>
+              </div>
+              <span class="sci-badge sci-badge-synthetic">IN-SAMPLE BASELINE</span>
+            </div>
+
+            <!-- Evaluation Primary Metrics (Read from data/results/detections.json) -->
+            <div class="metric-strip">
+              <div class="metric-cell">
+                <div class="metric-cell-label">Detection Recall</div>
+                <div class="metric-cell-value" id="evalRecallVal">75.0%</div>
+                <div class="metric-cell-caption" id="evalRecallSub">TP = 3, FN = 1 (matchRadius = 12 px)</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">Detection Precision</div>
+                <div class="metric-cell-value" id="evalPrecisionVal">50.0%</div>
+                <div class="metric-cell-caption" id="evalPrecisionSub">TP = 3, FP = 3 (includes distractors)</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">F1-Score</div>
+                <div class="metric-cell-value" id="evalF1Val">0.60</div>
+                <div class="metric-cell-caption">Harmonic mean of precision & recall</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-cell-label">Evaluation Mode</div>
+                <div class="metric-cell-value" style="font-size: 14px; margin-top: 4px;">In-Sample Tuning</div>
+                <div class="metric-cell-caption" id="evalSourceSub">Source: data/results/detections.json</div>
+              </div>
+            </div>
+
+            <div class="technical-note">
+              <strong>False Positive Rationale in Stage 3:</strong>
+              False Positives in per-frame detection include single-frame transient distractors (meteor streaks and aircraft strobe flashes).
+              The detector deliberately maintains higher sensitivity to avoid rejecting faint debris; the multi-frame Stage 4 tracker subsequently rejects non-orbital single-frame transients.
+            </div>
+
+            <!-- Empirical Detection Thresholds per Frame (detections.json / detections.mat) -->
+            <div class="console-section-header">
+              <h3 style="font-size: 12px; font-weight: 700; color: var(--text-main);">Empirical Background Thresholds per Frame (data/results/detections.json)</h3>
+            </div>
+
+            <div class="technical-table-wrapper" style="margin-bottom: 16px;">
+              <table class="data-table-dense">
+                <thead>
+                  <tr>
+                    <th>Observation Frame</th>
+                    <th class="num-cell">Noise Floor Estimate (σ₀)</th>
+                    <th class="num-cell">Otsu Threshold (otsuT)</th>
+                    <th class="num-cell">Effective Segmentation Floor (T)</th>
+                    <th>Background Mode</th>
+                    <th>Matched Filter Gaussian (σ)</th>
+                  </tr>
+                </thead>
+                <tbody id="evalThresholdsTableBody">
+                  <tr>
+                    <td class="mono-cell">Frame 1</td>
+                    <td class="num-cell">3.71 DN</td>
+                    <td class="num-cell">8.02 DN</td>
+                    <td class="num-cell">8.00 DN</td>
+                    <td>Temporal Median</td>
+                    <td class="mono-cell">1.50 px</td>
+                  </tr>
+                  <tr>
+                    <td class="mono-cell">Frame 2</td>
+                    <td class="num-cell">3.71 DN</td>
+                    <td class="num-cell">7.63 DN</td>
+                    <td class="num-cell">7.63 DN</td>
+                    <td>Temporal Median</td>
+                    <td class="mono-cell">1.50 px</td>
+                  </tr>
+                  <tr>
+                    <td class="mono-cell">Frame 3</td>
+                    <td class="num-cell">3.71 DN</td>
+                    <td class="num-cell">6.36 DN</td>
+                    <td class="num-cell">6.36 DN</td>
+                    <td>Temporal Median</td>
+                    <td class="mono-cell">1.50 px</td>
+                  </tr>
+                  <tr>
+                    <td class="mono-cell">Frame 4</td>
+                    <td class="num-cell">4.45 DN</td>
+                    <td class="num-cell">8.21 DN</td>
+                    <td class="num-cell">8.00 DN</td>
+                    <td>Temporal Median</td>
+                    <td class="mono-cell">1.50 px</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Robustness Sweeps Description -->
+            <div class="console-section-header">
+              <h3 style="font-size: 12px; font-weight: 700; color: var(--text-main);">Robustness & Sensitivity Sweep Protocol (evaluate_pipeline.m)</h3>
+            </div>
+
+            <div class="technical-table-wrapper">
+              <table class="data-table-dense">
+                <thead>
+                  <tr>
+                    <th>Sweep Type</th>
+                    <th>Parameter Domain</th>
+                    <th>Objective</th>
+                    <th>Output Artifact</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Noise Sweep</strong></td>
+                    <td>$\times 0, 0.5, 1.0, 2.0$ Background Sigma</td>
+                    <td>Test detection breakdown point under degrading SNR</td>
+                    <td><code class="mono-cell">evaluation.csv</code></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Parameter Grid</strong></td>
+                    <td>$k_\sigma \in [3, 4, 5], \text{smooth} \in [1, 1.5, 2]\text{ px}$</td>
+                    <td>Identify brittle parameter tuning boundaries</td>
+                    <td><code class="mono-cell">evaluation.csv</code></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Held-Out Frame</strong></td>
+                    <td>Hide frame $k \in \{1 \dots N\}$ sequentially</td>
+                    <td>Evaluate Kalman dead-reckoning coasting error</td>
+                    <td><code class="mono-cell">evaluation.csv</code></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </section>
+
+
+          <!-- ========================================================
+               VIEW 8: Reports and Export
+               ======================================================== -->
+          <section id="viewReportsExport" class="view-container" style="display: none;">
+            <div class="console-section-header">
+              <div>
+                <h2 class="section-headline">Reports & Scientific Artifact Export</h2>
+                <p class="section-subtext">Direct download of all verified outputs, Gate A bundles, and schema validation.</p>
+              </div>
+            </div>
+
+            <!-- Available Artifacts Table -->
+            <div class="technical-table-wrapper">
+              <table class="data-table-dense">
+                <thead>
+                  <tr>
+                    <th>Artifact File</th>
+                    <th>Content Description</th>
+                    <th>Format</th>
+                    <th>Status in Active Job</th>
+                    <th style="text-align: right;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="reportsArtifactsTableBody">
+                  <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 14px;">Select an active job to inspect artifacts.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Gate A Remote Session Packages -->
+            <div class="grid-2">
+              <div class="ingestion-panel">
+                <div class="panel-header-strip">
+                  <span>Export Gate A Execution Bundle</span>
+                </div>
+                <div class="panel-body">
+                  <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 10px;">
+                    Self-contained ZIP package containing observation BMP frames, driver scripts, modified headless defaults, and runner scripts.
+                  </p>
+                  <button id="reportsDownloadBundleBtn" class="sci-btn sci-btn-primary" style="width: 100%;">
+                    Download Job Bundle (.zip)
+                  </button>
+                </div>
+              </div>
+
+              <div class="ingestion-panel">
+                <div class="panel-header-strip">
+                  <span>Import Results Package</span>
+                  <span class="sci-badge sci-badge-upload">SCHEMA VALIDATED</span>
+                </div>
+                <div class="panel-body">
+                  <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 10px;">
+                    Upload returned ZIP package containing <code class="mono-cell">detections.csv</code> and/or <code class="mono-cell">tracks.csv</code>.
+                  </p>
+                  <button id="reportsNavToExecBtn" class="sci-btn" style="width: 100%;">
+                    Open Ingestion Console
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </section>
+
+
+          <!-- ========================================================
+               VIEW 9: Provenance & Audit
+               ======================================================== -->
+          <section id="viewProvenance" class="view-container" style="display: none;">
+            <div class="console-section-header">
+              <div>
+                <h2 class="section-headline">Cryptographic Provenance & Algorithm Preservation Audit</h2>
+                <p class="section-subtext">SHA-256 integrity digests for all 12 frozen MATLAB mathematical modules.</p>
+              </div>
+              <span class="sci-badge sci-badge-success">ALGORITHMS FROZEN & VERIFIED</span>
+            </div>
+
+            <div class="technical-table-wrapper" style="margin-bottom: 20px;">
+              <table class="data-table-dense" id="pipelineHashesTable">
+                <thead>
+                  <tr>
+                    <th>Script / Module</th>
+                    <th>Mathematical Function</th>
+                    <th>SHA-256 Digest</th>
+                    <th style="text-align: right;">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="pipelineHashesTableBody">
+                  <tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 16px;">Computing cryptographic hashes...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="console-section-header">
+              <h3 style="font-size: 12px; font-weight: 700; color: var(--text-main);">Active Observation Provenance (job.json)</h3>
+            </div>
+            <pre id="jobMetadataViewer" class="diff-code-box">Select an observation job to audit provenance.</pre>
+
+          </section>
+
+
+          <!-- ========================================================
+               VIEW 10: Execution & MATLAB Engine
+               ======================================================== -->
+          <section id="viewExecution" class="view-container" style="display: none;">
+            <div class="console-section-header">
+              <div>
+                <h2 class="section-headline">MATLAB Execution Boundary & Gate A Verification</h2>
+                <p class="section-subtext">Direct process control, remote package export, and schema-verified result import.</p>
+              </div>
+              <span id="execStateBadge" class="sci-badge">NO SELECTION</span>
+            </div>
+
+            <div class="ingestion-workbench" style="margin-bottom: 20px;">
+              <div class="ingestion-panel">
+                <div class="panel-header-strip">
+                  <span>Execution Controls</span>
+                </div>
+                <div class="panel-body">
+                  <div style="margin-bottom: 12px;">
+                    <div style="font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">State Lifecycle Audit:</div>
+                    <div id="stateTransitionHistory" class="diff-code-box" style="height: 100px; padding: 6px 10px; font-size: 10px;">
+                      Select a job from registry.
+                    </div>
+                  </div>
+
+                  <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                    <button id="runMatlabBtn" class="sci-btn sci-btn-primary" style="flex: 1;">
+                      Execute Pipeline
+                    </button>
+                    <button id="downloadBundleBtn" class="sci-btn" style="flex: 1;">
+                      Export Bundle (.zip)
+                    </button>
+                  </div>
+
+                  <div id="execMsgAlert" style="display: none; font-size: 11px; padding: 8px 10px; border-radius: 2px; margin-top: 10px;"></div>
+                </div>
+              </div>
+
+              <div class="ingestion-panel">
+                <div class="panel-header-strip">
+                  <span>Remote Result Ingestion</span>
+                  <span class="sci-badge sci-badge-upload">SCHEMA VALIDATION</span>
+                </div>
+                <div class="panel-body">
+                  <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 10px;">
+                    Ingest returned execution artifacts from colleague workstation. Must conform to 22-column detection and 11-column tracking schemas.
+                  </p>
+                  <form id="importForm">
+                    <div class="scientific-dropzone" id="importDropzone" style="padding: 14px;">
+                      <input type="file" id="importFileInput" accept=".zip" style="display: none;">
+                      <div class="dropzone-prompt" style="font-size: 11px;">Select returned results .zip</div>
+                      <div class="dropzone-rules">Contains detections.csv / tracks.csv</div>
+                    </div>
+                    <div id="importStatus" style="margin-top: 8px; font-size: 11px; min-height: 16px;"></div>
+                    <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                      <button type="submit" id="submitImportBtn" class="sci-btn sci-btn-primary" disabled>
+                        Verify & Ingest Results
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <!-- Configuration Diff Audit -->
+            <div class="console-section-header">
+              <h3 style="font-size: 12px; font-weight: 700; color: var(--text-main);">Headless Batch Configuration Audit (debris_defaults.m)</h3>
+            </div>
+            <pre id="configDiffViewer" class="diff-code-box">Loading diff verification...</pre>
+
+          </section>
+
+
+          <!-- ========================================================
+               VIEW 11: Capabilities Matrix (Section 8)
+               ======================================================== -->
+          <section id="viewCapabilities" class="view-container" style="display: none;">
+            <div class="console-section-header">
+              <div>
+                <h2 class="section-headline">Advanced Scientific Capabilities Status Matrix</h2>
+                <p class="section-subtext">Comprehensive classification of current, partially implemented, and planned features.</p>
+              </div>
+            </div>
+
+            <div class="technical-table-wrapper">
+              <table class="data-table-dense">
+                <thead>
+                  <tr>
+                    <th>Capability</th>
+                    <th>Classification</th>
+                    <th>Engine / Script</th>
+                    <th>Technical Description & Current Scope</th>
+                  </tr>
+                </thead>
+                <tbody id="capabilitiesTableBody">
+                  <tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 16px;">Loading capabilities matrix...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+
+          <!-- ========================================================
+               VIEW 12: MATLAB Demonstration Media
+               ======================================================== -->
+          <section id="viewDemonstration" class="view-container" style="display: none;">
+            <div class="console-section-header">
+              <div>
+                <h2 class="section-headline">MATLAB Pipeline Demonstration</h2>
+                <p class="section-subtext">Recorded demonstration media from an external MATLAB session. These are pre-recorded reference materials, not live analysis outputs.</p>
+              </div>
+              <span class="sci-badge sci-badge-warning">REFERENCE MEDIA · NOT LIVE RESULTS</span>
+            </div>
+
+            <div class="technical-note">
+              <strong>Demonstration Disclaimer:</strong>
+              The video and images below were captured from a separate MATLAB session and provided by the project author.
+              They illustrate the detection and tracking pipeline in operation but are not generated by this web application.
+              Do not interpret these as live outputs from the current VIGIL instance.
+            </div>
+
+            <!-- Demo Video Player -->
+            <div id="demoVideoSection" style="margin-bottom: 24px;">
+              <div class="console-section-header" style="margin-bottom: 10px;">
+                <h3 style="font-size: 13px; font-weight: 700; color: var(--text-main);">Pipeline Execution Recording</h3>
+              </div>
+              <div id="demoVideoContainer" class="demo-video-container">
+                <div id="demoVideoLoading" class="demo-loading-state">
+                  <span style="color: var(--text-muted); font-size: 12px;">Checking for demonstration video...</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Demo Image Gallery -->
+            <div id="demoGallerySection">
+              <div class="console-section-header" style="margin-bottom: 10px;">
+                <h3 style="font-size: 13px; font-weight: 700; color: var(--text-main);">Supporting Analysis Screenshots</h3>
+              </div>
+              <div id="demoGalleryContainer" class="demo-gallery">
+                <div id="demoGalleryLoading" class="demo-loading-state">
+                  <span style="color: var(--text-muted); font-size: 12px;">Checking for demonstration images...</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

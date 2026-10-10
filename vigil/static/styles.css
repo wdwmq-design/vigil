@@ -1,0 +1,1010 @@
+/* ==========================================================================
+   VIGIL — Visual Identification & Geometric Inference of Orbital Debris
+   NASA JPL Solar System Dynamics Inspired Scientific Workstation Stylesheet
+   ========================================================================== */
+
+:root {
+  /* Exact Color Specification (NASA JPL Scientific Workstation Palette) */
+  --bg-canvas: #FFFFFF;
+  --bg-sidebar: #F7F8FA;
+  --bg-toolbar: #F8FAFC;
+  --bg-subtle: #F1F5F9;
+  --bg-table-zebra: #FAFAFC;
+  
+  --border-light: #E5E7EB;
+  --border-subtle: #EEF2F6;
+  --border-dark: #CBD5E1;
+  
+  --text-main: #111827;
+  --text-secondary: #64748B;
+  --text-muted: #94A3B8;
+  
+  --blue-primary: #2563EB;
+  --blue-hover: #1D4ED8;
+  --blue-subtle: #EFF6FF;
+  --blue-border: #BFDBFE;
+  
+  --amber-status: #B45309;
+  --amber-bg: #FEF3C7;
+  --amber-border: #FCD34D;
+  
+  --emerald-status: #15803D;
+  --emerald-bg: #ECFDF5;
+  --emerald-border: #A7F3D0;
+  
+  --rose-status: #DC2626;
+  --rose-bg: #FEF2F2;
+  --rose-border: #FECACA;
+
+  --purple-status: #5B21B6;
+  --purple-bg: #F5F3FF;
+  --purple-border: #DDD6FE;
+
+  /* Restrained Scientific Type System */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, "SF Mono", Monaco, "Liberation Mono", Consolas, monospace;
+  --font-heading: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Reset & Foundation */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-sans);
+  background-color: var(--bg-canvas);
+  color: var(--text-main);
+  font-size: 13px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Scientific Instrument Frame */
+.workstation-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-canvas);
+}
+
+/* 1. Slim Application Header (NASA Technical Header Style) */
+.instrument-header {
+  height: 44px;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  flex-shrink: 0;
+  z-index: 20;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-title {
+  font-family: var(--font-heading);
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  background-color: var(--blue-primary);
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 2px;
+  letter-spacing: 0.06em;
+}
+
+.brand-separator {
+  color: var(--border-dark);
+  font-weight: 300;
+  font-size: 13px;
+}
+
+.brand-subtitle {
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.header-status-strip {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 11px;
+}
+
+.header-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+}
+
+.header-meta-label {
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.03em;
+}
+
+/* 2. Sub-Header Gate & Mission Alert Bar */
+.gate-audit-bar {
+  background-color: var(--bg-toolbar);
+  border-bottom: 1px solid var(--border-light);
+  padding: 6px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.gate-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gate-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 7px;
+  border-radius: 2px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.gate-badge.pending {
+  background-color: var(--amber-bg);
+  color: var(--amber-status);
+  border: 1px solid var(--amber-border);
+}
+
+.gate-badge.verified {
+  background-color: var(--emerald-bg);
+  color: var(--emerald-status);
+  border: 1px solid var(--emerald-border);
+}
+
+.gate-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 3. Main Workspace Layout */
+.workspace-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Sidebar Navigation (NASA Technical Directory Style) */
+.instrument-sidebar {
+  width: 220px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.sidebar-section-title {
+  padding: 12px 14px 4px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+}
+
+.sidebar-nav-list {
+  list-style: none;
+  padding: 0 6px;
+  margin-bottom: 6px;
+}
+
+.nav-link-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 9px;
+  border-radius: 2px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-main);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+  margin-bottom: 2px;
+}
+
+.nav-link-btn:hover {
+  background-color: #EEF2F6;
+  color: var(--text-main);
+}
+
+.nav-link-btn:focus-visible {
+  outline: 2px solid var(--blue-primary);
+  outline-offset: -1px;
+}
+
+.nav-link-btn.active {
+  background-color: #FFFFFF;
+  color: var(--blue-primary);
+  font-weight: 600;
+  border: 1px solid var(--border-light);
+  border-left: 3px solid var(--blue-primary);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.nav-link-btn svg {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.nav-link-btn.active svg {
+  color: var(--blue-primary);
+}
+
+.sidebar-footer-info {
+  margin-top: auto;
+  padding: 12px 14px;
+  border-top: 1px solid var(--border-light);
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  background-color: var(--bg-sidebar);
+}
+
+/* Scientific Center Console */
+.instrument-console {
+  flex: 1;
+  overflow-y: auto;
+  background-color: var(--bg-canvas);
+  display: flex;
+  flex-direction: column;
+}
+
+.console-viewport {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 18px 24px 48px;
+}
+
+/* Page Section Title (Technical Document Header Style) */
+.console-section-header {
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 9px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.section-headline {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.section-subtext {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 3px;
+  line-height: 1.4;
+}
+
+/* Filter & Search Bar */
+.filter-toolbar {
+  background-color: var(--bg-toolbar);
+  border: 1px solid var(--border-light);
+  border-radius: 2px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.filter-select, .filter-input {
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  padding: 4px 8px;
+  border-radius: 2px;
+  border: 1px solid var(--border-dark);
+  background-color: #FFFFFF;
+  color: var(--text-main);
+  outline: none;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.filter-select:focus, .filter-input:focus {
+  border-color: var(--blue-primary);
+  box-shadow: 0 0 0 1px var(--blue-primary);
+}
+
+/* Clean Scientific Ingestion Workbench */
+.ingestion-workbench {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.ingestion-panel {
+  border: 1px solid var(--border-light);
+  background-color: #FFFFFF;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-header-strip {
+  background-color: var(--bg-toolbar);
+  border-bottom: 1px solid var(--border-light);
+  padding: 7px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.panel-body {
+  padding: 14px;
+}
+
+.spec-list {
+  list-style: none;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.spec-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  border-bottom: 1px dashed var(--border-subtle);
+  padding: 3px 0;
+}
+
+.spec-list li:last-child {
+  border-bottom: none;
+}
+
+.spec-name {
+  color: var(--text-muted);
+  width: 90px;
+  flex-shrink: 0;
+}
+
+.spec-val {
+  font-family: var(--font-mono);
+  color: var(--text-main);
+}
+
+/* Restrained Dropzone */
+.scientific-dropzone {
+  border: 1px dashed var(--border-dark);
+  background-color: var(--bg-toolbar);
+  border-radius: 2px;
+  padding: 18px 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.scientific-dropzone:hover {
+  border-color: var(--blue-primary);
+  background-color: var(--blue-subtle);
+}
+
+.dropzone-prompt {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.dropzone-rules {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* Technical Data Tables (NASA SSD Clean Grid Style) */
+.technical-table-wrapper {
+  border: 1px solid var(--border-light);
+  border-radius: 2px;
+  background-color: #FFFFFF;
+  overflow-x: auto;
+  margin-bottom: 18px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.015);
+}
+
+.data-table-dense {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11.5px;
+  text-align: left;
+  letter-spacing: -0.005em;
+}
+
+.data-table-dense th {
+  background-color: var(--bg-toolbar);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 7px 11px;
+  border-bottom: 1px solid var(--border-light);
+  border-right: 1px solid var(--border-subtle);
+  white-space: nowrap;
+}
+
+.data-table-dense th:last-child {
+  border-right: none;
+}
+
+.data-table-dense td {
+  padding: 6.5px 11px;
+  border-bottom: 1px solid var(--border-subtle);
+  border-right: 1px solid var(--border-subtle);
+  color: var(--text-main);
+  white-space: nowrap;
+  font-size: 11.5px;
+}
+
+.data-table-dense td:last-child {
+  border-right: none;
+}
+
+.data-table-dense tbody tr:nth-child(even) {
+  background-color: var(--bg-table-zebra);
+}
+
+.data-table-dense tbody tr:hover {
+  background-color: #F0F7FF;
+}
+
+.data-table-dense tbody tr.selected-row {
+  background-color: #E0EFFF;
+}
+
+.mono-cell {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: -0.01em;
+}
+
+.num-cell {
+  font-family: var(--font-mono);
+  text-align: right;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.01em;
+  font-size: 11px;
+}
+
+/* Compact Metric Strip */
+.metric-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.metric-cell {
+  border: 1px solid var(--border-light);
+  background-color: #FFFFFF;
+  padding: 10px 14px;
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.015);
+}
+
+.metric-cell-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+
+.metric-cell-value {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+  margin-top: 2px;
+}
+
+.metric-cell-caption {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Image Inspection Workstation */
+.image-inspection-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.image-inspection-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.viewport-panel {
+  border: 1px solid var(--border-light);
+  border-radius: 2px;
+  background-color: #FFFFFF;
+}
+
+.viewport-toolbar {
+  background-color: var(--bg-toolbar);
+  border-bottom: 1px solid var(--border-light);
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.viewport-canvas-container {
+  background-color: #030712;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.viewport-canvas-container img {
+  max-width: 100%;
+  max-height: 480px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Frame Stack Thumbnail Strip */
+.frame-strip {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 8px 0;
+  margin-bottom: 14px;
+}
+
+.frame-card {
+  border: 1px solid var(--border-light);
+  border-radius: 2px;
+  padding: 6px;
+  background-color: #FFFFFF;
+  width: 140px;
+  flex-shrink: 0;
+  font-size: 11px;
+}
+
+.frame-card.active {
+  border-color: var(--blue-primary);
+  background-color: var(--blue-subtle);
+}
+
+/* Restrained Scientific Buttons */
+.sci-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 11px;
+  border-radius: 2px;
+  cursor: pointer;
+  border: 1px solid var(--border-dark);
+  background-color: #FFFFFF;
+  color: var(--text-main);
+  text-decoration: none;
+  transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
+  line-height: 1.25;
+}
+
+.sci-btn:hover {
+  background-color: var(--bg-subtle);
+  border-color: #94A3B8;
+}
+
+.sci-btn:focus-visible {
+  outline: 2px solid var(--blue-primary);
+  outline-offset: 1px;
+}
+
+.sci-btn:active {
+  background-color: var(--border-subtle);
+}
+
+.sci-btn-primary {
+  background-color: var(--blue-primary);
+  border-color: var(--blue-primary);
+  color: #FFFFFF;
+}
+
+.sci-btn-primary:hover {
+  background-color: var(--blue-hover);
+  border-color: var(--blue-hover);
+}
+
+.sci-btn-primary:focus-visible {
+  outline: 2px solid var(--blue-hover);
+  outline-offset: 1px;
+}
+
+.sci-btn-sm {
+  padding: 3px 8px;
+  font-size: 11px;
+}
+
+.sci-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Compact Badges */
+.sci-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1.5px 6px;
+  border-radius: 2px;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.sci-badge-synthetic {
+  background-color: var(--blue-subtle);
+  color: var(--blue-primary);
+  border: 1px solid var(--blue-border);
+}
+
+.sci-badge-upload {
+  background-color: #F3F4F6;
+  color: #4B5563;
+  border: 1px solid #D1D5DB;
+}
+
+.sci-badge-success, .sci-badge-implemented {
+  background-color: var(--emerald-bg);
+  color: var(--emerald-status);
+  border: 1px solid var(--emerald-border);
+}
+
+.sci-badge-warning, .sci-badge-partially {
+  background-color: var(--amber-bg);
+  color: var(--amber-status);
+  border: 1px solid var(--amber-border);
+}
+
+.sci-badge-danger, .sci-badge-missing {
+  background-color: var(--rose-bg);
+  color: var(--rose-status);
+  border: 1px solid var(--rose-border);
+}
+
+.sci-badge-unverified {
+  background-color: var(--purple-bg);
+  color: var(--purple-status);
+  border: 1px solid var(--purple-border);
+}
+
+.sci-badge-planned {
+  background-color: #F1F5F9;
+  color: #64748B;
+  border: 1px solid #CBD5E1;
+}
+
+.sci-badge-candidate {
+  background-color: #FEE2E2;
+  color: #B91C1C;
+  font-weight: 700;
+  border: 1px solid #FCA5A5;
+}
+
+/* Informational Technical Note */
+.technical-note {
+  border-left: 3px solid var(--blue-primary);
+  background-color: var(--bg-toolbar);
+  padding: 8px 12px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.technical-note strong {
+  color: var(--text-main);
+}
+
+/* Honest Empty State Banner */
+.honest-empty-state {
+  border: 1px solid var(--border-light);
+  border-radius: 2px;
+  background-color: var(--bg-toolbar);
+  padding: 36px 20px;
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.empty-state-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  background-color: #FEF3C7;
+  color: #92400E;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.empty-state-headline {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.empty-state-prose {
+  font-size: 12px;
+  color: var(--text-secondary);
+  max-width: 580px;
+  margin: 0 auto 14px;
+  line-height: 1.5;
+}
+
+/* Monospace Code & Diff Viewer */
+.diff-code-box {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background-color: #0F172A;
+  color: #E2E8F0;
+  padding: 10px 12px;
+  border-radius: 2px;
+  overflow-x: auto;
+  line-height: 1.5;
+  max-height: 280px;
+}
+
+.diff-add { color: #4ADE80; }
+.diff-rem { color: #F87171; }
+.diff-hunk { color: #60A5FA; }
+
+/* Grid Layouts */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+/* Detail Drawer / Inspection Box */
+.detail-drawer {
+  border: 1px solid var(--border-light);
+  background-color: #FFFFFF;
+  border-radius: 2px;
+  padding: 12px;
+  margin-top: 10px;
+}
+
+/* Tab Headers inside a view */
+.sub-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 14px;
+}
+
+.sub-tab-btn {
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+
+.sub-tab-btn:hover {
+  color: var(--text-main);
+}
+
+.sub-tab-btn.active {
+  color: var(--blue-primary);
+  border-bottom-color: var(--blue-primary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .ingestion-workbench {
+    grid-template-columns: 1fr;
+  }
+  .image-inspection-grid {
+    grid-template-columns: 1fr;
+  }
+  .metric-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Demonstration Media & Video Player */
+.demo-video-container {
+  border: 1px solid var(--border-light);
+  border-radius: 2px;
+  background-color: #FFFFFF;
+  overflow: hidden;
+}
+
+.demo-video-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.demo-video-player {
+  width: 100%;
+  max-height: 540px;
+  background-color: #030712;
+  display: block;
+  outline: none;
+}
+
+.demo-media-meta {
+  padding: 10px 14px;
+  background-color: var(--bg-toolbar);
+  border-top: 1px solid var(--border-light);
+}
+
+.demo-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.demo-gallery-card {
+  border: 1px solid var(--border-light);
+  border-radius: 2px;
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+}
+
+.demo-gallery-card:hover {
+  border-color: var(--blue-border);
+}
+
+.demo-image-frame {
+  background-color: #030712;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+  max-height: 340px;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+
+.demo-image-frame img {
+  max-width: 100%;
+  max-height: 340px;
+  object-fit: contain;
+  display: block;
+}
+
+.demo-card-body {
+  padding: 12px 14px;
+  background-color: #FFFFFF;
+  flex: 1;
+}
+
+.demo-loading-state, .demo-empty-state {
+  border: 1px dashed var(--border-dark);
+  background-color: var(--bg-toolbar);
+  border-radius: 2px;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+/* Accessibility: Global focus indicators & reduced motion */
+:focus-visible {
+  outline: 2px solid var(--blue-primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
